@@ -9,7 +9,7 @@ const CourseList = ({course}) => (
           <div className="card-body">
             <h5 className="card-title">CS {coursedata.number}: {coursedata.title}</h5>
             <p className="card-text">Term: {coursedata.term}</p>
-            <p className="card-text">Meets: {coursedata.meets}</p>
+            <p className="card-text">{coursedata.meets}</p>
           </div>
         </div>
       </div>
