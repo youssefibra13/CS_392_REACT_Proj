@@ -6,6 +6,10 @@ import Banner from "./components/Banner";
 import CourseList from "./components/CourseList";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { useJsonQuery } from './utilities/fetch';
+
+/*
 const schedule = {
   "title": "CS Courses for 2018-2019",
   "courses": {
@@ -35,14 +39,33 @@ const schedule = {
     }
   }
 };
+*/
+const Main = () => {
+  const [data, isLoading, error] = useJsonQuery('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php');
+
+  if (error) return <h1>Error loading classes: {`${error}`}</h1>;
+  if (isLoading) return <h1>Loading CS classes..</h1>;
+  if (!data) return <h1>No data found</h1>;
+
+  return (
+
+    <div>
+    <Banner banner = {data.title} />
+    <CourseList course = {data} />
+  </div>
+
+  )
+}
+
+const queryClient = new QueryClient();
 
 const App = () => (
-
-  /*<div className="container"> </div>*/
-  <div className="App">
-    <Banner banner = {schedule.title} />
-    <CourseList course = {schedule} />
-  </div>
+  <QueryClientProvider client={queryClient}>
+    <div className="App">
+      <Main />
+    </div>
+  </QueryClientProvider>
 );
+
 
 export default App;
