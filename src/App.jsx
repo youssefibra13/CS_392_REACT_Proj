@@ -9,6 +9,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useJsonQuery } from './utilities/fetch';
 
+import TermSelector from './components/TermSelector'; // Assuming you have the TermSelector component as described earlier
+
+
 /*
 const schedule = {
   "title": "CS Courses for 2018-2019",
@@ -42,6 +45,11 @@ const schedule = {
 */
 const Main = () => {
   const [data, isLoading, error] = useJsonQuery('https://courses.cs.northwestern.edu/394/guides/data/cs-courses.php');
+  const [selectedTerm, setSelectedTerm] = useState('Fall');
+
+  const handleTermChange = (term) => {
+    setSelectedTerm(term);
+  };
 
   if (error) return <h1>Error loading classes: {`${error}`}</h1>;
   if (isLoading) return <h1>Loading CS classes..</h1>;
@@ -51,7 +59,12 @@ const Main = () => {
 
     <div>
     <Banner banner = {data.title} />
-    <CourseList course = {data} />
+    <div className="col-md-3">
+      <label htmlFor="termSelector">Term</label>
+      <TermSelector selectedTerm={selectedTerm} onSelectTerm={handleTermChange} />
+    </div>
+    
+    <CourseList course = {data} selectedTerm = {selectedTerm}/>
   </div>
 
   )
